@@ -1,1 +1,2 @@
 Pozdravljeni!
+Zdravo :D
