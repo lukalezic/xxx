@@ -1,2 +1,0 @@
-Pozdravljeni!
-Zdravo :D
