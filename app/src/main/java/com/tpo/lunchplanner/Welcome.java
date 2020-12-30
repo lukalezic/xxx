@@ -14,6 +14,13 @@ public class Welcome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        String name = getIntent().getStringExtra("NAME");
+        String id = getIntent().getStringExtra("ID");
+
+        /*
+        ...
+         */
+
         Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,6 +35,8 @@ public class Welcome extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Welcome.this, AddLunch.class);
+                intent.putExtra("NAME", name);
+                intent.putExtra("ID", id);
                 startActivity(intent);
             }
         });

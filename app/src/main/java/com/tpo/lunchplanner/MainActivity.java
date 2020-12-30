@@ -17,10 +17,12 @@ import com.facebook.login.widget.LoginButton;
 import com.squareup.picasso.Picasso;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,6 +32,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
@@ -83,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Demo", object.toString());
                 try {
                     String name = object.getString("name");
+                    String id = object.getString("id");
                     String pic = object.getJSONObject("picture").getJSONObject("data").getString("url");
                     textView.setText("Welcome " + name);
                     Picasso.get().load(pic).into(imageView);
@@ -91,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Intent intent = new Intent(MainActivity.this, Welcome.class);
+                            intent.putExtra("NAME", name);
+                            intent.putExtra("ID", id);
                             startActivity(intent);
                             handler.postDelayed(new Runnable() {
                                 @Override
