@@ -2,5 +2,6 @@
     <string name="app_name">LunchPlanner</string>
     <string name="facebook_app_id">158321669313471</string>
     <string name="fb_login_protocol_scheme">fb158321669313471</string>
+    <string name="go_to_welcome">Go to welcome</string>
 
 </resources>

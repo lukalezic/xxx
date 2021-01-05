@@ -17,17 +17,27 @@ import com.facebook.login.widget.LoginButton;
 import com.squareup.picasso.Picasso;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                loginButton.setVisibility(View.GONE);
                 Log.d("Demo", "login successful");
             }
 
@@ -65,6 +76,15 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Demo", "Wrong data, dipshit");
             }
         });
+
+//        Button toWelcomeButton = findViewById(R.id.toWelcomeButton);
+//        toWelcomeButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, Welcome.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     @Override
@@ -78,9 +98,26 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Demo", object.toString());
                 try {
                     String name = object.getString("name");
+                    String id = object.getString("id");
                     String pic = object.getJSONObject("picture").getJSONObject("data").getString("url");
-                    textView.setText(name);
+                    textView.setText("Welcome " + name);
                     Picasso.get().load(pic).into(imageView);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(MainActivity.this, Welcome.class);
+                            intent.putExtra("NAME", name);
+                            intent.putExtra("ID", id);
+                            startActivity(intent);
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loginButton.setVisibility(View.VISIBLE);
+                                }
+                            },2000);
+                        }
+                    }, 3000);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
