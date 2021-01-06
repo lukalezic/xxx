@@ -25,10 +25,9 @@ public class Welcome extends AppCompatActivity {
 
     Connection conn;
     TextView lunchList;
-//    String firstName;
-//    String lastName;
     String name;
     String id;
+    String picture;
     ColorStateList default_color;
 
     @Override
@@ -62,6 +61,7 @@ public class Welcome extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                queryAndInsertInDatabase(true);
                 Intent intent = new Intent(Welcome.this, AddLunch.class);
                 intent.putExtra("NAME", name);
                 intent.putExtra("ID", id);
@@ -76,9 +76,9 @@ public class Welcome extends AppCompatActivity {
         super.onResume();
         name = getIntent().getStringExtra("NAME");
         id = getIntent().getStringExtra("ID");
+        picture = getIntent().getStringExtra("PIC");
         System.out.println("name: "+name);
         System.out.println("id: "+id);
-        lunchList.setText("Available lunches:");
         queryAndInsertInDatabase(true);
     }
 
@@ -104,6 +104,7 @@ public class Welcome extends AppCompatActivity {
     }
 
     private void queryAndInsertInDatabase(boolean checkIfIn) {
+        lunchList.setText("Available lunches:");
         try {
             conn = connectionClass();
             if(conn == null){
@@ -127,6 +128,7 @@ public class Welcome extends AppCompatActivity {
                     String lastname = rs.getString("LastName");
                     String time = rs.getString("LunchTime");
                     String place = rs.getString("Location");
+                    String picture = rs.getString("PictureUrl");
                     time = time.substring(0,5);
                     System.out.println("***Query successful!***");
                     String tmp = "\n"+ firstname+ " " + lastname + ", " + time + ", " + place;
@@ -138,10 +140,13 @@ public class Welcome extends AppCompatActivity {
                         lunchList.append(tmp);
                     }
                 }
+//                System.err.println("**ai: "+alreadyIn);
                 if (!alreadyIn && checkIfIn) {
-                    String insert = "insert into Users (userId) values ("+id+")";
+                    String insert = "insert into Users (userId, PictureUrl) values (" + id + ", '" + picture + "')";
+//                    System.err.println(insert);
                     PreparedStatement preparedStmt = conn.prepareStatement(insert);
                     preparedStmt.execute();
+                    System.out.println("***Insert successful!***");
                 }
                 conn.close();
             }

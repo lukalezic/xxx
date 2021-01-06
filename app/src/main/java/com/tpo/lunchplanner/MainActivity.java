@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                             Intent intent = new Intent(MainActivity.this, Welcome.class);
                             intent.putExtra("NAME", name);
                             intent.putExtra("ID", id);
+                            intent.putExtra("PIC", pic);
                             startActivity(intent);
                             handler.postDelayed(new Runnable() {
                                 @Override
